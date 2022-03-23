@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>商品列表页面</title>
+    <!--导入Jquery的js库-->
+    <script src="js/jquery-3.4.1.min.js"></script>
+</head>
+<body>
+
+        <table width="500px" height="400px" align="center" border="1px" cellspacing="0">
+            <tr>
+                <th>商品编号</th>
+                <th>商品名称</th>
+                <th>商品价格</th>
+                <th>商品描述</th>
+            </tr>
+
+            <tr id="myTr">
+               <!-- <td>1</td>
+                <td>华为</td>
+                <td>6799</td>
+                <td>为照相而生</td>-->
+            </tr>
+        </table>
+</body>
+<script>
+    //页面载入事件
+    $(function(){
+       //alert("页面载入事件触发了") ;
+        //Jquery的ajax
+
+        //获取id="myTr"的标签对象
+        var tr = $("#myTr") ;
+        $.ajax({
+            url:"/Servlet_Mybatis_Spring_war/findAllShop", //后台接口地址
+            type:"get",
+            success: function(data){ //data:服务器响应过来成功的数据
+                //遍历data
+                //[{"shopDesc":"为照相而生","shopId":1,"shopName":"华为mate30pro","shopPrice":5799},{"shopDesc":"为发烧而生","shopId":2,"shopName":"小米p10","shopPrice":3567},{"shopDesc":"为爆炸而生","shopId":3,"shopName":"三星","shopPrice":2999},{"shopDesc":"为装B而生","shopId":4,"shopName":"iphone13","shopPrice":4899}]
+                //alert(data) ;
+                //$(data):Jquery对象
+                $(data).each(function(){
+                    //遍历了 tr后面追加td这些动作
+
+                    tr.append("<td>"+this.shopId+"</td>") ;
+                    tr.append("<td>"+this.shopName+"</td>") ;
+                    tr.append("<td>"+this.shopPrice+"</td>") ;
+                    tr.append("<td>"+this.shopDesc+"</td>") ;
+                  //alert(this.shopName) ;
+                    document.write("<br>");
+                })
+            },
+            dataType: "json" //服务器想响应过来的数据格式
+        }) ;
+    });
+
+</script>
+</html>

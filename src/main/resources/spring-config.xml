@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <!--管理bean
+        service
+        持久层的mapper...
+
+        mybatis和Spring整合的时候,以后不需要mybatis-config.xml
+        需要导入两个jar包
+            spring-jdbc.jar 提供数据源连接池
+            以及mybatis和spring的整合jar包
+
+
+
+    -->
+    <!--管理业务接口以及持久层层, 都交给Spring-->
+    <bean id="shopService"  class="com.qf.service.impl.ShopServiceImpl">
+
+        <property name="shopMapper" ref="shopMapper"></property>
+    </bean>
+   <!-- <bean id="shopMapper" class="com.qf.mapper.ShopMapper"></bean>-->
+
+    <!--配置数据源：spring提供 spring-jdbc.jar
+            DataSource
+
+    -->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+
+        <!--配置连接信息-->
+<!--        驱动类 set方法注入-->
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+        <property name="url" value="jdbc:mysql://localhost:3306/yiyiyingshe"></property>
+        <property name="username" value="root"></property>
+        <property name="password" value="123456"></property>
+    </bean>
+
+
+    <!--mybatis和spring整合
+
+    org.mybatis.spring.SqlSessionFactoryBean
+        管理SqlSessionFactory
+
+    -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--关联数据源-->
+        <!--内置属性:private DataSource dataSource: 引用类型-->
+        <property name="dataSource" ref="dataSource"></property>
+        <!--配置实体类的别名包扫描
+        内置属性:private String typeAliasesPackage set方法注入进去
+        -->
+        <property name="typeAliasesPackage" value="com.qf.pojo"></property>
+        <!--配置映射文件的路径加载  扫描映射文件
+            内置属性:private Resource[] mapperLocations; set方法注入
+            value="classpath:/*Mapper.xml
+        -->
+        <property name="mapperLocations" value="classpath:mapper/*Mapper.xml"></property>
+
+    </bean>
+    <!--还需要让spring容器要识别sqlSessionFactory
+
+     mybatis和额Spring整合的一个核心类  配置一个mapper接口的包扫描
+
+    id名字必须叫mapperScannerConfiguerer
+    -->
+    <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+<!--        配置属性
+     private String sqlSessionFactoryBeanName:内置属性 指定的SqlSessionFactory
+-->
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+        <!--告知spring扫描持久层的mapper接口
+            内置属性
+              private String basePackage;
+
+        -->
+        <property name="basePackage" value="com.qf.mapper"></property>
+    </bean>
+
+
+
+
+</beans>

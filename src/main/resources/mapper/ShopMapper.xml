@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qf.mapper.ShopMapper">
+    <!--定义resultMap:输出映射,需要将实体类属性名称和表中字段映射-->
+    <resultMap id="shopMap" type="shop">
+<!--     主键字段-->
+        <id property="shopId" column="shop_id"></id>
+        <!--其他字段-->
+        <result property="shopName" column="shop_name"></result>
+        <result property="shopPrice" column="shop_price"></result>
+        <result property="shopDesc" column="shop_desc"></result>
+    </resultMap>
+    <!--sql片段-->
+    <sql id="selectAllSql">
+         select * from shop 
+    </sql>
+    <select id="findAll" resultMap="shopMap">
+        <include refid="selectAllSql"></include>
+       
+    </select>
+</mapper>
